@@ -8,7 +8,7 @@
 <body>
     <div class="text-center jumbotron pt-1">
         <h1 class="pb-2">Confirm Book Being Removed</h1>
-        <form action="#" th:actions="@{/bookDeleted}" th:object="${book}" method="post">
+        <form action="#" th:action="@{/bookDeleted}" th:object="${book}" method="post">
             <p class="col-md-12 font-weight-bold mb-1 mt-1">Book ID</p>
             <input class="col-md-4 text-center" type="text" th:field="*{bookID}" th:value="${book.bookID}" readonly/>
             <p class="col-md-12 font-weight-bold mb-1 mt-1">Book Title</p>

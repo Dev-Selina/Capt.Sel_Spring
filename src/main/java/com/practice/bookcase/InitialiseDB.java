@@ -1,7 +1,6 @@
 package com.practice.bookcase;
 
 import org.sqlite.SQLiteConfig;
-
 import java.sql.*;
 import java.util.ArrayList;
 
