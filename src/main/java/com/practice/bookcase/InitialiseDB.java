@@ -1,6 +1,7 @@
 package com.practice.bookcase;
 
 import org.sqlite.SQLiteConfig;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class InitialiseDB {
         }
         return con;
     }
+
     private void createTables(Connection con) {
         try {
             Statement stmnt = con.createStatement();
@@ -31,11 +33,13 @@ public class InitialiseDB {
             System.out.println(ex.getClass());
         }
     }
+
     public Connection getDBConnection() {//if it is the first time the db table is being created
         Connection con = connectDB();
         createTables(con);
         return con;
     }
+
     public ArrayList<Book> getBooks(Connection con) {
         ArrayList<Book> books = new ArrayList<>();
         Statement stmnt = null; //can't leave it empty because gives error of not being initialised, it gets initialised at #wolf
@@ -60,16 +64,19 @@ public class InitialiseDB {
         } finally {//after using a try and catch, the finally block always runs regardless of throwing an exception. it is used to "clean house"
             // i.e. closing the statement to make sure that if it gets stuck then it will be stopped because of finally
             try {
-                stmnt.close();
-                con.close();
+                //close method  throws an exception
+                stmnt.close(); //need to close conneciton otherwies overload of data.
+                con.close(); // closing can cause to throw exception.
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return books; //#cat returns the arraylist
     }
-    public void addNewBook(Connection con, Book book){
-        try{
+
+    public void addNewBook(Connection con, Book book) {
+        try {
             String addBooks = "INSERT INTO tblBooks (book_title, book_author, book_released, book_blurb, book_cover) VALUES" + "(?,?,?,?,?)";
             PreparedStatement pst = con.prepareStatement(addBooks);
             pst.setString(1, book.getBookTitle());
@@ -79,67 +86,66 @@ public class InitialiseDB {
             pst.setString(5, book.getCoverURL());
             pst.executeUpdate();
             pst.close();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex.getClass());
             ex.printStackTrace();
-        }
-        finally{
-            try{
+        } finally {
+            try {
                 con.close();
-            } catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
-    public boolean updateBookRecord(Connection con, Book book){
-        try{
+
+    public boolean updateBookRecord(Connection con, Book book) { // sometiems can write throws execption forcing an exception (a checked exception) to be catch
+        try {
             String updateRecord = "UPDATE tblBooks SET book_title = ?, book_author = ?, book_released = ?, book_blurb = ?, book_cover = ? WHERE book_id = ?";
             PreparedStatement prepStatement = con.prepareStatement(updateRecord);
-            prepStatement.setString(1,book.getBookTitle());
-            prepStatement.setString(2,book.getBookAuthor());
-            prepStatement.setString(3,book.getBookYear());
-            prepStatement.setString(4,book.getBookBlurb());
-            prepStatement.setString(5,book.getCoverURL());
-            prepStatement.setInt(6,book.getBookID());
+            //The below statements must be in the correct order as the SQL statement referes ot it to getBooktitle etc
+            prepStatement.setString(1, book.getBookTitle());
+            prepStatement.setString(2, book.getBookAuthor());
+            prepStatement.setString(3, book.getBookYear());
+            prepStatement.setString(4, book.getBookBlurb());
+            prepStatement.setString(5, book.getCoverURL());
+            prepStatement.setInt(6, book.getBookID());
 
             prepStatement.executeUpdate();
             prepStatement.close();
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex.getClass());
             ex.printStackTrace();
             return false;
-        }
-        finally {
-            try{
+        } finally {
+            try {
                 con.close();
-            } catch(SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-    return true;
-}
-public boolean removeBook(Connection con, Book book){
-        try{
+        return true;
+    }
+
+    public boolean removeBook(Connection con, Book book) {
+        try {
             String removeBook = "DELETE FROM tblBooks WHERE book_id = ?";
             PreparedStatement prepStatement = con.prepareStatement(removeBook);
             prepStatement.setInt(1, book.getBookID());
             prepStatement.executeUpdate();
             prepStatement.close();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex.getClass());
             ex.printStackTrace();
             return false;
         } finally {
-            try{
+            try {
                 con.close();
-            } catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return true;
-}
+    }
 //      Main method not required for application
 //    public static void main(String[] args) {
 //        InitialiseDB initDB = new InitialiseDB();

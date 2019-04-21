@@ -19,14 +19,14 @@
     </tr>
     </thead>
     <tbody class="tbody-light">
-    <tr th:each="books : ${book}">
+    <div th:each="books : ${book}">
         <td class="align-middle" th:text="${books.getBookID()}"></td>
         <td class="align-middle" style="max-width: 25%; width:25%"><img class="img-thumbnail w-25" th:src="${books.getCoverURL()}"></td>
         <td class="align-middle" th:text="${books.getBookTitle()}"></td>
         <td class="align-middle" th:text="${books.getBookBlurb()}"></td>
         <td class="align-middle" th:text="${books.getBookAuthor()}"></td>
         <td class="align-middle" th:text="${books.getBookYear()}"></td>
-    </tr>
+    </div>
     </tbody>
 </table>
 <div class="container text-center">
